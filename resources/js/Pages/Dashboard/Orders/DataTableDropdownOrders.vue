@@ -207,9 +207,9 @@ const updateState = (deleteOrder: boolean = false) => {
 			<!-- Agregar inv -->
 			<AlertDialogItem
 				v-if="original.fk_est_ped_id === 2"
-				dropdownText="Actualizar pedido"
-				title="Actualizar pedido"
-				description="¿Estás seguro de que deseas actualizar este pedido? No se podrá volver atrás."
+				dropdownText="Entregar el pedido"
+				title="Entregar pedido"
+				description="¿Estás seguro de que deseas entregar este pedido? No se podrá volver atrás."
 				cancel="Cancelar"
 				action="Avanzar"
 				@submit="updateState"

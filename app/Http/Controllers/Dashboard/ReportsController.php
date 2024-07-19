@@ -21,6 +21,7 @@ class ReportsController extends Controller
       "reg_inv_fec",
       'fk_reg_inv_tip'
     ])->toArray();
+    $allInvLog = RegistroInventario::with(['inventario.producto', 'tipoRegistroInventario'])->get();
     // Total count of products
     $productsCount = Producto::count();
     $productTypesCount = TipoProducto::count();
@@ -33,6 +34,7 @@ class ReportsController extends Controller
         'products' => $productsCount,
         'productTypes' => $productTypesCount,
       ],
+      'allInvLog' => $allInvLog
     ]);
   }
 }

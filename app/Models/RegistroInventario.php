@@ -23,6 +23,6 @@ class RegistroInventario extends Model
 
     public function tipoRegistroInventario()
     {
-        return $this->belongsTo(TipoRegistroInventario::class, 'fk_reg_inv_tip', 'reg_inv_tip_id');
+        return $this->belongsTo(TipoRegistroInventario::class, 'fk_reg_inv_tip', 'tip_reg_inv_id');
     }
 }

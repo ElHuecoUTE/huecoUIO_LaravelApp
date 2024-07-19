@@ -1,9 +1,14 @@
 <script setup lang="ts">
+import { InventoryLogColumn, OrderColumn } from '@/components/table/columns';
+import DataTable from '@/components/table/DataTable.vue';
+import { ColumnDef } from '@tanstack/vue-table';
+import { ArrowUpDown } from 'lucide-vue-next';
+import { Button } from '@/components/ui/button';
 import InfoCard from '@/components/InfoCard.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import Chart from 'chart.js/auto';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, h, watch } from 'vue';
 
 const props = defineProps<{
 	stats: {
@@ -13,7 +18,113 @@ const props = defineProps<{
 		products: number;
 		productTypes: number;
 	};
+  allInvLog: any[];
 }>();
+
+type CustomColumnDef =
+  | ColumnDef<InventoryLogColumn>
+  | {
+      name: string;
+    };
+const LOGS_INVENTORY_COLUMNS: CustomColumnDef[]=[
+  {
+    id: 'reg_inv_id',
+    accessorKey: 'reg_inv_id',
+    header: ({ column }) => {
+      return h(
+        Button,
+        {
+          variant: 'ghost',
+          onClick: () => column.toggleSorting(column.getIsSorted() === 'asc')
+        },
+        () => ['ID', h(ArrowUpDown, { class: 'w-4 h-4 ml-2' })]
+      );
+    },
+    cell: ({ row }) => h('div', { class: 'ml-4' }, [row.original.reg_inv_id]),
+    enableSorting: true,
+    name: 'ID'
+  },
+  {
+    accessorKey: 'reg_inv_fec',
+    header: ({ column }) => {
+      return h(
+        Button,
+        {
+          variant: 'ghost',
+          onClick: () => column.toggleSorting(column.getIsSorted() === 'asc')
+        },
+        () => ['Fecha', h(ArrowUpDown, { class: 'w-4 h-4 ml-2' })]
+      );
+    },
+    cell: ({ row }) => h('div', { class: 'ml-4' }, [row.original.reg_inv_fec]),
+    enableSorting: true,
+    name: 'Fecha'
+  },
+  {
+    accessorKey: 'pro_nom',
+    header: ({ column }) => {
+      return h(
+        Button,
+        {
+          variant: 'ghost',
+          onClick: () => column.toggleSorting(column.getIsSorted() === 'asc')
+        },
+        () => ['Descripcion', h(ArrowUpDown, { class: 'w-4 h-4 ml-2' })]
+      );
+    },
+    cell: ({ row }) => h('div', { class: 'ml-4' }, [row.original.inventario.producto.pro_nom]),
+    filterFn: (row, _, filterValue) => {
+      return row.original.inventario.producto.pro_nom.toLowerCase().includes(filterValue.toLowerCase());
+    },
+    enableSorting: true,
+    name: 'Producto'
+  },
+  {
+    accessorKey: 'reg_inv_can',
+    header: ({ column }) => {
+      return h(
+        Button,
+        {
+          variant: 'ghost',
+          onClick: () => column.toggleSorting(column.getIsSorted() === 'asc')
+        },
+        () => ['Cantidad', h(ArrowUpDown, { class: 'w-4 h-4 ml-2' })]
+      );
+    },
+    cell: ({ row }) => h('div', { class: 'ml-4' }, [row.original.reg_inv_can]),
+    enableSorting: true,
+    name: 'Cantidad'
+  },
+  {
+    accessorKey: 'reg_inv_tip',
+    header: ({ column }) => {
+      return h(
+        Button,
+        {
+          variant: 'ghost',
+          onClick: () => column.toggleSorting(column.getIsSorted() === 'asc')
+        },
+        () => ['Tipo', h(ArrowUpDown, { class: 'w-4 h-4 ml-2' })]
+      );
+    },
+    cell: ({ row }) => h('div', { class: 'ml-4' }, [row.original.fk_reg_inv_tip]),
+    enableSorting: true,
+    name: 'Tipo'
+  }
+];
+
+const dataRef = ref(props.allInvLog || []);
+const filters: string = 'pro_nom';
+
+watch(
+  () => props.allInvLog,
+  (value) => {
+    if (value) {
+      dataRef.value = [...dataRef.value, ...value];
+    }
+  }
+);
+
 const chart = ref<HTMLCanvasElement | null>(null);
 
 onMounted(() => {
@@ -161,6 +272,16 @@ onMounted(() => {
 				<div class="relative mt-8 w-full">
 					<canvas ref="chart"></canvas>
 				</div>
+
+        <h3 class="text-lg font-semibold leading-tight text-gray-800">Registros de Inventario</h3>
+        <DataTable
+          :data="dataRef || []"
+          :columns="LOGS_INVENTORY_COLUMNS as unknown as ColumnDef<any>[]"
+          :filters="filters || ''"
+          placeholder="Buscar Registro por Nombre del Producto"
+          >
+        </DataTable>
+
 			</div>
 		</div>
 	</AuthenticatedLayout>

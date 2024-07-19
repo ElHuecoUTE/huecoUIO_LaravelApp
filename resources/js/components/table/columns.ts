@@ -44,6 +44,21 @@ export type InventoryColumn = {
 	estado_inventario: InventoryStatusColumn;
 };
 
+export type InventoryLogTypeColumn = {
+  tip_reg_inv_id: number;
+  tip_reg_inv_nom: string;
+};
+
+export type InventoryLogColumn = {
+  reg_inv_id: number;
+  fk_inv_id: number;
+  reg_inv_fec: string;
+  reg_inv_can: number;
+  fk_reg_inv_tip: number;
+  inventario: InventoryColumn;
+  tipo_registro: InventoryLogTypeColumn;
+}
+
 export type OrderStatusColumn = {
 	est_ped_id: number;
 	est_ped_nom: string;
