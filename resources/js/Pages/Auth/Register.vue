@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import { useToast } from '@/components/ui/toast/use-toast';
 
 const form = useForm({
 	name: '',
@@ -12,11 +13,21 @@ const form = useForm({
 	password_confirmation: ''
 });
 
+const { toast } = useToast();
+
 const submit = () => {
 	form.post(route('register'), {
 		onFinish: () => {
 			form.reset('password', 'password_confirmation');
-		}
+		},
+    onError: (errors) => {
+      toast({
+        title: 'Uh oh! Algo salió mal.',
+        description: Object.values(errors)[0] || 'Por favor, revise los campos e intente de nuevo.',
+        variant: 'destructive',
+        duration: 5000
+      });
+    }
 	});
 };
 </script>
