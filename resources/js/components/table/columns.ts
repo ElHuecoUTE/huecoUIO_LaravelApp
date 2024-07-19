@@ -46,7 +46,7 @@ export type InventoryColumn = {
 
 export type InventoryLogTypeColumn = {
   tip_reg_inv_id: number;
-  tip_reg_inv_nom: string;
+  tip_reg_inv_des: string;
 };
 
 export type InventoryLogColumn = {

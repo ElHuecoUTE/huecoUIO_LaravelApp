@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { InventoryLogColumn, OrderColumn } from '@/components/table/columns';
+import { InventoryLogColumn} from '@/components/table/columns';
 import DataTable from '@/components/table/DataTable.vue';
 import { ColumnDef } from '@tanstack/vue-table';
 import { ArrowUpDown } from 'lucide-vue-next';
@@ -96,7 +96,7 @@ const LOGS_INVENTORY_COLUMNS: CustomColumnDef[]=[
     name: 'Cantidad'
   },
   {
-    accessorKey: 'reg_inv_tip',
+    accessorKey: 'fk_reg_inv_tip',
     header: ({ column }) => {
       return h(
         Button,
@@ -107,7 +107,7 @@ const LOGS_INVENTORY_COLUMNS: CustomColumnDef[]=[
         () => ['Tipo', h(ArrowUpDown, { class: 'w-4 h-4 ml-2' })]
       );
     },
-    cell: ({ row }) => h('div', { class: 'ml-4' }, [row.original.fk_reg_inv_tip]),
+    cell: ({ row }) => h('div', { class: 'ml-4' }, [row.original.fk_reg_inv_tip === 1 ? 'Entrada' : 'Salida']),
     enableSorting: true,
     name: 'Tipo'
   }
