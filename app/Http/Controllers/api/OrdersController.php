@@ -30,6 +30,7 @@ class OrdersController extends Controller
       ]
     }
     update:
+    Nota: Solo es posible cambiar el estado a 3 cuando el estado actual es 2.
     Url: http://localhost:8000/api/pedidos/{id}
     {
       "estado": "integer"
@@ -74,11 +75,11 @@ class OrdersController extends Controller
       $total = 0;
       foreach ($request->detallePedido as $detalle) {
         $producto = Producto::findOrFail($detalle['productoId']);
-        $total += $producto->pro_pre * $detalle['cantidad'];
+        $total += $producto->pro_val * $detalle['cantidad'];
         $pedido->detallePedido()->create([
           'fk_pro_id' => $detalle['productoId'],
           'det_ped_can' => $detalle['cantidad'],
-          'det_ped_pre' => $producto->pro_pre
+          'det_ped_pre' => $producto->pro_val * $detalle['cantidad'],
         ]);
       }
 
@@ -95,11 +96,17 @@ class OrdersController extends Controller
   public function update($id, Request $request): JsonResponse
   {
     try {
+      if ($request->estado == 2) {
+        return $this->sendError('Error al actualizar el pedido', 'No se puede cambiar el estado a Enviado. Solamente en aplicación.', 400);
+      }
       $request->validate([
-        'estado' => 'required|integer',
+        'estado' => 'required|integer|min:3',
       ]);
 
       $pedido = Pedido::findOrFail($id);
+      if($pedido->fk_est_ped_id == 1) {
+        return $this->sendError('Error al actualizar el pedido', 'No se puede cambiar el estado pendiente a entregado directamente. Solamente en aplicación.', 400);
+      }
       $pedido->update([
         'fk_est_ped_id' => $request->estado
       ]);
