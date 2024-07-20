@@ -95,7 +95,7 @@ const openedUpdateForm = () => {
 							<Check />
 							<div class="flex-1 space-y-1">
 								<p class="text-sm font-medium leading-none">Estado</p>
-								<p class="text-sm text-muted-foreground">${{ original.producto.pro_val }}</p>
+								<p class="text-sm text-muted-foreground">{{ original.estado_inventario.est_inv_des }}</p>
 							</div>
 						</div>
 					</div>

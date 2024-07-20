@@ -42,7 +42,7 @@ const CLIENTS_COLUMNS: CustomColumnDef[] = [
 		name: 'ID'
 	},
 	{
-		accessorKey: 'cliente.cli_nom',
+		accessorKey: 'cli_nom',
 		header: ({ column }) => {
 			return h(
 				Button,
@@ -54,6 +54,9 @@ const CLIENTS_COLUMNS: CustomColumnDef[] = [
 			);
 		},
 		cell: ({ row }) => h('div', { class: 'ml-4' }, [row.original.cliente.cli_nom]),
+    filterFn: (row, _, filterValue) => {
+      return row.original.cliente.cli_nom.toLowerCase().includes(filterValue.toLowerCase());
+    },
 		enableSorting: true,
 		name: 'Cliente'
 	},
@@ -79,7 +82,8 @@ const CLIENTS_COLUMNS: CustomColumnDef[] = [
 			return h('div', ['Estado']);
 		},
 		cell: ({ row }) => h('div', { class: 'capitalize' }, [row.original.estado_pedido.est_ped_nom]),
-		enableSorting: false
+		enableSorting: false,
+    name: 'Estado'
 	},
 	{
 		accessorKey: 'ped_fec',
@@ -112,7 +116,7 @@ const CLIENTS_COLUMNS: CustomColumnDef[] = [
 	}
 ];
 
-const filters: string = 'ped_id';
+const filters: string = 'cli_nom';
 
 watch(
 	() => props.result,

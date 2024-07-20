@@ -32,7 +32,7 @@ export type ProductColumn = {
 
 export type InventoryStatusColumn = {
 	est_inv_id: number;
-	est_inv_nom: string;
+	est_inv_des: string;
 };
 
 export type InventoryColumn = {
